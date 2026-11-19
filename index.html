@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Arena Breakout Tactical Loot Admin">
+  <title>Blacksite — Arena Breakout Admin</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-emblem">
+          <span>AB</span>
+        </div>
+        <div class="brand-copy">
+          <strong>BLACKSITE</strong>
+          <span>TACTICAL ADMIN</span>
+        </div>
+      </div>
+
+      <div class="section-label">COMMAND</div>
+      <nav class="nav">
+        <button class="nav-item active" data-view="overview">
+          <span class="nav-symbol">◈</span>
+          <span class="nav-copy"><b>Command Center</b><small>Overview & intelligence</small></span>
+        </button>
+        <button class="nav-item" data-view="loot">
+          <span class="nav-symbol">◇</span>
+          <span class="nav-copy"><b>Loot Operations</b><small>Extraction records</small></span>
+        </button>
+        <button class="nav-item" data-view="accounts">
+          <span class="nav-symbol">◎</span>
+          <span class="nav-copy"><b>Operators</b><small>Account management</small></span>
+        </button>
+      </nav>
+
+      <div class="sidebar-spacer"></div>
+
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme">
+        <span class="theme-toggle-left"><span class="theme-icon" id="themeIcon">☀</span><span id="themeLabel">Light mode</span></span>
+        <span>↔</span>
+      </button>
+
+      <div class="mission-card">
+        <div class="mission-top">
+          <span>SERVER STATUS</span>
+          <span class="pulse"></span>
+        </div>
+        <strong id="connectionStatus">CONNECTING</strong>
+        <div class="mission-line"><span id="connectionDot" class="status-dot pending"></span><span>Database connection</span></div>
+      </div>
+
+      <div class="profile-mini">
+        <div class="avatar">OP</div>
+        <div>
+          <strong>ADMIN OPERATOR</strong>
+          <span>BLACKSITE CONTROL</span>
+        </div>
+        <span class="online-dot"></span>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="top-left">
+          <button class="mobile-menu" id="mobileMenu">☰</button>
+          <div>
+            <div class="breadcrumb"><span>BLACKSITE</span><i>/</i><span id="breadcrumbPage">COMMAND CENTER</span></div>
+            <h1 id="pageTitle">Command Center</h1>
+          </div>
+        </div>
+        <div class="top-right">
+          <button class="btn btn-ghost" id="themeToggleTop" type="button" aria-label="Toggle theme">☼ Theme</button>
+          <div class="live-clock">
+            <span class="live-dot"></span>
+            <span id="currentDateLabel">—</span>
+          </div>
+          <button class="btn btn-primary" data-action="focus-add"><span>＋</span> Record Loot</button>
+        </div>
+      </header>
+
+      <section class="view active" data-view-panel="overview">
+        <div class="dashboard-header">
+          <div>
+            <div class="eyebrow"><span class="line"></span> DASHBOARD OVERVIEW</div>
+            <h2>Good to see you, Operator.</h2>
+            <p>Monitor your Arena Breakout accounts, extraction value, and recent activity from one place.</p>
+          </div>
+          <button class="btn btn-primary" data-action="focus-add">＋ Record loot</button>
+        </div>
+
+        <div class="kpi-grid">
+          <article class="kpi-card">
+            <div class="kpi-head"><span>NET EXTRACTION</span><span class="kpi-icon gold">◈</span></div>
+            <strong id="statTotalLoot">0</strong>
+            <div class="kpi-foot"><span class="trend up">↑</span> All recorded raids</div>
+          </article>
+          <article class="kpi-card green">
+            <div class="kpi-head"><span>TODAY'S HAUL</span><span class="kpi-icon">◉</span></div>
+            <strong id="statTodayLoot">0</strong>
+            <div class="kpi-foot"><span class="trend up">●</span> <span id="statTodayMeta">0 raids</span></div>
+          </article>
+          <article class="kpi-card blue">
+            <div class="kpi-head"><span>OPERATORS</span><span class="kpi-icon">◎</span></div>
+            <strong id="statAccounts">0</strong>
+            <div class="kpi-foot">Registered accounts</div>
+          </article>
+          <article class="kpi-card purple">
+            <div class="kpi-head"><span>AVG / RAID</span><span class="kpi-icon">◆</span></div>
+            <strong id="statAverage">0</strong>
+            <div class="kpi-foot">Average extraction value</div>
+          </article>
+        </div>
+
+        <div class="section-title-row">
+          <div><span class="section-label">LIVE OPERATIONS</span><h3>Operator readiness</h3></div>
+          <div class="date-control"><span>MISSION DATE</span><input type="date" id="dashboardDate" class="input input-date"></div>
+        </div>
+
+        <div class="operator-strip" id="dailyLogContainer"></div>
+
+        <div class="content-grid">
+          <section class="panel chart-panel">
+            <div class="panel-head">
+              <div><span class="section-label">PERFORMANCE</span><h3>Operator ranking</h3></div>
+              <span class="panel-tag">TOP 5</span>
+            </div>
+            <div id="topAccountsContainer" class="rank-list"></div>
+          </section>
+
+          <section class="panel activity-panel">
+            <div class="panel-head">
+              <div><span class="section-label">ACTIVITY FEED</span><h3>Recent extractions</h3></div>
+              <button class="text-btn" data-view="loot">View all →</button>
+            </div>
+            <div id="recentLoots" class="activity-table"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="view" data-view-panel="loot">
+        <div class="page-heading">
+          <div><span class="eyebrow"><span class="line"></span> DATA ARCHIVE</span><h2>Loot Operations</h2><p>Log extraction results and maintain the mission archive.</p></div>
+          <button class="btn btn-primary" data-action="focus-add">＋ New extraction</button>
+        </div>
+
+        <section class="panel form-panel" id="lootFormPanel">
+          <div class="panel-head">
+            <div><span class="section-label" id="formKicker">NEW EXTRACTION</span><h3 id="formTitle">Record mission result</h3></div>
+            <button id="cancelEditBtn" class="btn btn-danger-soft hidden" data-action="cancel-edit">Cancel edit</button>
+          </div>
+          <form id="lootForm" class="form-grid">
+            <label class="field"><span>Operator account</span><select id="accountSelect" class="input" required></select></label>
+            <label class="field field-wide"><span>Extraction value</span>
+              <div class="input-wrap"><input type="number" id="lootValue" class="input input-number" min="0" placeholder="0" required><span class="input-suffix">KOEN</span></div>
+              <div class="presets">
+                <button type="button" class="chip" data-preset="100000">+100K</button>
+                <button type="button" class="chip" data-preset="500000">+500K</button>
+                <button type="button" class="chip" data-preset="1000000">+1M</button>
+                <button type="button" class="chip" data-preset="5000000">+5M</button>
+                <button type="button" class="chip chip-danger" data-action="clear-loot">CLEAR</button>
+              </div>
+            </label>
+            <label class="field"><span>Mission date</span><input type="date" id="matchDate" class="input" required></label>
+            <div class="field submit-field"><span>&nbsp;</span><button type="submit" id="submitLootBtn" class="btn btn-success btn-block">Save extraction</button></div>
+          </form>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head"><div><span class="section-label">MISSION ARCHIVE</span><h3>Extraction records</h3></div>
+            <div class="toolbar"><input type="date" id="lootFilterDate" class="input input-date"><button class="btn btn-ghost" data-action="clear-filter">All dates</button></div>
+          </div>
+          <div id="lootTable" class="table-wrap"></div>
+        </section>
+      </section>
+
+      <section class="view" data-view-panel="accounts">
+        <div class="page-heading">
+          <div><span class="eyebrow"><span class="line"></span> OPERATOR CONTROL</span><h2>Operators</h2><p>Manage game accounts and inspect extraction performance.</p></div>
+          <div class="add-account"><input id="newAccountInput" class="input" type="text" placeholder="Operator callsign"><button class="btn btn-primary" data-action="add-account">＋ Add operator</button></div>
+        </div>
+        <section class="panel">
+          <div class="panel-head"><div><span class="section-label">ROSTER</span><h3>Registered operators</h3></div><span class="panel-tag" id="accountCountLabel">0 accounts</span></div>
+          <div id="accountTable" class="table-wrap"></div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div id="accountModal" class="modal hidden">
+    <div class="modal-backdrop" data-action="close-modal"></div>
+    <div class="modal-card">
+      <div class="modal-head"><div><span class="section-label">OPERATOR PROFILE</span><h3 id="modalAccountName">Manage account</h3></div><button class="btn btn-ghost" data-action="close-modal">Close</button></div>
+      <div class="modal-section"><label class="field"><span>Callsign</span><div class="inline-form"><input id="editAccountNameInput" class="input" type="text"><button class="btn btn-secondary" data-action="update-account">Update</button><button class="btn btn-danger" data-action="delete-account">Delete</button></div></label></div>
+      <div class="modal-section"><span class="section-label">EXTRACTION HISTORY</span><div id="modalLootHistory" class="history-list"></div></div>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
